@@ -8,8 +8,8 @@ from netbox.models import ChangeLoggedModel
 from utilities.choices import ChoiceSet
 from utilities.querysets import RestrictedQuerySet
 
+from netbox_cmdb.choices import AssetMonitoringStateChoices, AssetStateChoices
 from netbox_cmdb.constants import BGP_MAX_ASN, BGP_MIN_ASN
-from netbox_cmdb.choices import AssetStateChoices, AssetMonitoringStateChoices
 from netbox_cmdb.models.circuit import Circuit
 
 
@@ -80,14 +80,14 @@ class AfiSafi(ChangeLoggedModel):
     route_policy_in = models.ForeignKey(
         to="RoutePolicy",
         related_name="%(class)s_in",
-        on_delete=models.PROTECT,
+        on_delete=models.RESTRICT,
         null=True,
         blank=True,
     )
     route_policy_out = models.ForeignKey(
         to="RoutePolicy",
         related_name="%(class)s_out",
-        on_delete=models.PROTECT,
+        on_delete=models.RESTRICT,
         null=True,
         blank=True,
     )
@@ -182,14 +182,14 @@ class BGPSessionCommon(ChangeLoggedModel):
     route_policy_in = models.ForeignKey(
         to="RoutePolicy",
         related_name="%(class)s_in",
-        on_delete=models.PROTECT,
+        on_delete=models.RESTRICT,
         null=True,
         blank=True,
     )
     route_policy_out = models.ForeignKey(
         to="RoutePolicy",
         related_name="%(class)s_out",
-        on_delete=models.PROTECT,
+        on_delete=models.RESTRICT,
         null=True,
         blank=True,
     )
@@ -245,7 +245,7 @@ class DeviceBGPSession(BGPSessionCommon):
 
     peer_group = models.ForeignKey(
         to="BGPPeerGroup",
-        on_delete=models.PROTECT,
+        on_delete=models.RESTRICT,
         blank=True,
         null=True,
         help_text="warning: changing this field will cause the reset of the BGP session",

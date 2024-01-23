@@ -72,10 +72,10 @@ class RoutePolicyTerm(ChangeLoggedModel):
     # match
     from_bgp_community = models.CharField(max_length=100, blank=True)
     from_bgp_community_list = models.ForeignKey(
-        to="BgpCommunityList", on_delete=models.PROTECT, null=True, blank=True
+        to="BgpCommunityList", on_delete=models.RESTRICT, null=True, blank=True
     )
     from_prefix_list = models.ForeignKey(
-        to="PrefixList", on_delete=models.PROTECT, null=True, blank=True
+        to="PrefixList", on_delete=models.RESTRICT, null=True, blank=True
     )
     from_source_protocol = models.CharField(max_length=32, choices=SOURCE_PROTOCOL, blank=True)
     from_route_type = models.CharField(max_length=32, choices=ROUTE_TYPE, blank=True)
