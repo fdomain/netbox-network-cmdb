@@ -4,6 +4,7 @@ import django_tables2 as tables
 
 from netbox.tables import NetBoxTable, columns
 from netbox_cmdb.models.bgp import ASN, BGPPeerGroup, BGPSession, DeviceBGPSession
+from netbox_cmdb.models.route_policy import RoutePolicy
 
 
 class ASNTable(NetBoxTable):
@@ -83,4 +84,17 @@ class BGPPeerGroupTable(NetBoxTable):
             "route_policy_in",
             "route_policy_out",
             "maximum_prefixes",
+        )
+
+
+class RoutePolicyTable(NetBoxTable):
+    device = tables.LinkColumn()
+    name = tables.LinkColumn()
+
+    class Meta(NetBoxTable.Meta):
+        model = RoutePolicy
+        fields = (
+            "pk",
+            "device",
+            "name",
         )

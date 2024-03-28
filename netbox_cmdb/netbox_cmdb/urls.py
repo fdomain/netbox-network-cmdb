@@ -4,6 +4,7 @@ from django.urls import path
 from netbox.views.generic import ObjectChangeLogView, ObjectJournalView
 
 from netbox_cmdb.models.bgp import *
+from netbox_cmdb.models.route_policy import RoutePolicy
 from netbox_cmdb.views import (
     ASNDeleteView,
     ASNEditView,
@@ -22,6 +23,10 @@ from netbox_cmdb.views import (
     DeviceBGPSessionListView,
     DeviceBGPSessionView,
     DeviecBGPSessionDeleteView,
+    RoutePolicyDeleteView,
+    RoutePolicyEditView,
+    RoutePolicyListView,
+    RoutePolicyView,
 )
 
 urlpatterns = [
@@ -115,5 +120,31 @@ urlpatterns = [
         ObjectJournalView.as_view(),
         name="bgppeergroup_journal",
         kwargs={"model": BGPPeerGroup},
+    ),
+    # Route Policy
+    path("route-policy/", RoutePolicyListView.as_view(), name="routepolicy_list"),
+    path("route-policy/add/", RoutePolicyEditView.as_view(), name="routepolicy_add"),
+    path("route-policy/<int:pk>/", RoutePolicyView.as_view(), name="routepolicy"),
+    path(
+        "route-policy/<int:pk>/edit/",
+        RoutePolicyEditView.as_view(),
+        name="routepolicy_edit",
+    ),
+    path(
+        "route-policy/<int:pk>/delete/",
+        RoutePolicyDeleteView.as_view(),
+        name="routepolicy_delete",
+    ),
+    path(
+        "route-policy/<int:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="routepolicy_changelog",
+        kwargs={"model": RoutePolicy},
+    ),
+    path(
+        "route-policy/<int:pk>/journal/",
+        ObjectJournalView.as_view(),
+        name="routepolicy_journal",
+        kwargs={"model": RoutePolicy},
     ),
 ]

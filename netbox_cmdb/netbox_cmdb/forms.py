@@ -15,7 +15,7 @@ from utilities.forms.fields.fields import SlugField
 from netbox.forms import NetBoxModelFilterSetForm, NetBoxModelForm
 from netbox_cmdb.choices import AssetMonitoringStateChoices, AssetStateChoices
 from netbox_cmdb.models.bgp import ASN, BGPPeerGroup, BGPSession, DeviceBGPSession
-from netbox_cmdb.models.route_policy import RoutePolicy
+from netbox_cmdb.models.route_policy import RoutePolicy, RoutePolicyTerm
 
 
 class ASNForm(NetBoxModelForm):
@@ -114,6 +114,57 @@ class BGPPeerGroupForm(NetBoxModelForm):
             "remote_asn",
             "tags",
         ]
+
+
+class RoutePolicyForm(NetBoxModelForm):
+    device = DynamicModelChoiceField(queryset=Device.objects.all())
+
+    class Meta:
+        model = RoutePolicy
+        fields = [
+            "name",
+            "device",
+            "description",
+        ]
+
+
+RoutePolicyTermFormSet = forms.inlineformset_factory(
+    RoutePolicy,  # Parent model
+    RoutePolicyTerm,  # Child model
+    fields=[
+        "description",
+        "sequence",
+        "decision",
+        "from_bgp_community",
+        "from_bgp_community_list",
+        "from_prefix_list",
+        "from_source_protocol",
+        "from_route_type",
+        "from_local_pref",
+        "set_local_pref",
+        "set_community",
+        "set_origin",
+        "set_metric",
+        "set_large_community",
+        "set_as_path_prepend_asn",
+        "set_as_path_prepend_repeat",
+        "set_next_hop",
+    ],
+    extra=1,  # Number of extra forms
+)
+
+
+class RoutePolicyFilterSetForm(NetBoxModelFilterSetForm):
+    device__id = DynamicModelMultipleChoiceField(
+        queryset=Device.objects.all(),
+        label=_("Device"),
+        required=False,
+    )
+    name = forms.CharField(
+        required=False,
+    )
+
+    model = RoutePolicy
 
 
 class InlineTermForm(forms.models.BaseInlineFormSet):

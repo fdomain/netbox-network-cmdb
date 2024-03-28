@@ -1,8 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from netbox.models import ChangeLoggedModel
+from django.urls import reverse
 from utilities.querysets import RestrictedQuerySet
 
+from netbox.models import ChangeLoggedModel
 from netbox_cmdb.choices import DecisionChoice
 from netbox_cmdb.fields import CustomIPAddressField
 
@@ -30,6 +31,9 @@ class RoutePolicy(ChangeLoggedModel):
 
     def __repr__(self):
         return str(self.name)
+
+    def get_absolute_url(self):
+        return reverse("plugins:netbox_cmdb:routepolicy", args=[self.pk])
 
     class Meta:
         verbose_name_plural = "Route Policies"
